@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Gerador de Assinatura</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,900;1,400;1,900&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" type="text/css"
+		href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+
+<style type="text/css">
+	* {
+		font-family: 'Poppins', sans-serif;
+	}
+
+	body {
+		margin: 0;
+		background-color: #272727;
+		color: whitesmoke;
+		overflow-x: hidden;
+	}
+
+	.header {
+		display: flex;
+		justify-content: center;
+		text-align: center;
+	}
+
+	.brand img {
+		width: 150px;
+		margin-right: 30px;
+	}
+
+	.content {
+		display: flex;
+		justify-content: start;
+	}
+
+	.forms,
+	.result {
+		margin: 10px;
+		padding: 30px;
+		align-self: center;
+	}
+
+	.result {
+		min-width: 740px;
+		background-color: whitesmoke;
+	}
+
+	.form {
+		margin: 0 auto;
+	}
+
+	a {
+		color: whitesmoke;
+	}
+
+
+	label {
+		display: block;
+		font-weight: bold;
+	}
+
+	input {
+		display: block;
+		padding: 10px 20px;
+		margin: 10px;
+		min-width: 280px;
+		width: calc(100% - 60px);
+	}
+
+	input[type="file"] {
+		display: none;
+	}
+
+	.logo-btn {
+		padding: 10px 10px;
+		width: 305px;
+		margin: 10px auto;
+		background-color: whitesmoke;
+		color: black;
+		display: block;
+		text-align: center;
+		cursor: pointer;
+		border: 1px solid black;
+		transition: 0.4s;
+
+	}
+
+	.actions {
+		display: flex;
+		justify-content: center;
+	}
+
+	.actions a:hover{
+		box-shadow: 0 0 20px whitesmoke;
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		margin: 0 auto;
+	}
+
+	.form {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#code-input {
+		display: block;
+		width: 0px;
+		height: 0px;
+		position: absolute;
+		opacity: 0;
+	}
+
+	.bt-copy {
+		margin: 10px;
+		background-color: rgb(255, 255, 255);
+		border-radius: 16px;
+		border: none;
+		color: rgb(0, 0, 0);
+		text-decoration: none;
+		width: 300px;
+		padding: 10px;
+		text-align: center;
+		transition: 0.4s;
+	}
+
+	.img-to-download {
+		display: none;
+		text-align: center;
+		margin-bottom: 70px;
+	}
+
+	.img-to-download a{
+		font-size: 30px;
+		margin-top: 20px;
+		padding: 10px 30px;
+		background-color: rgb(121, 121, 121);
+		color: rgb(255, 255, 255);
+		border-radius: 16px;
+		text-decoration: none;
+		transition: 0.4s;
+	}
+
+	.img-to-download a:hover{
+		box-shadow: 0 0 40px whitesmoke;
+	}
+
+	.suporte {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.help {
+		display: flex;
+		justify-content: space-around;
+		width: 100vw;
+	}
+
+	.help a {
+		display: flex;
+		margin: 30px 0px;
+		width: 200px;
+		text-align: center;
+		justify-content: center;
+		padding: 40px 30px;
+		border: 1px solid grey;
+		border-radius: 20px;
+		text-decoration: none;
+		background-color: #1fc8db;
+	}
+
+	.help a:hover {
+		background-image: linear-gradient(140deg, lightgrey 100%, white 0%);
+	}
+
+	.previewImage {
+		margin: 0 auto;
+	}
+
+	.byme a:hover{
+		box-shadow: none;
+	}	
+
+</style>
+
+<body>
+
+	<section class="header">
+		<div class="description">
+			<h1>Gere sua assinatura aqui!</h1>
+			<p>Preencha com os dados do usuário e clique no botão abaixo:</p>
+			<div class="actions">
+				<!-- <a href="#" onclick="copyCode()" class="bt-copy">Copiar</a> -->
+				<a href="#" id="btn-img-copy" class="bt-copy">Gerar Assinatura</a>
+			</div>
+		</div>
+	</section>
+
+	<div class="content">
+
+		<div class="form">
+			<div class="forms">
+				<label class="logo-btn">Logotipo<input type="file" name="logo" id="logo" value=""></label>
+				<input type="text" name="first-name" id="first-name" value="" placeholder="Nome:">
+				<input placeholder="Cargo ou descrição:" type="text" name="job-description" id="job-description"
+					value=""></label>
+				<input placeholder="Telefones:" type="tel" name="phone" id="phone" value="">
+				<input placeholder="Whatsapp (Apenas um número):" type="tel" name="whats" id="whats" value="">
+				<input placeholder="Website:" type="url" name="site" id="site" value="">
+				<input placeholder="Endereço:" type="text" name="address" id="address" value="">
+			</div>
+
+			<div id="result" class="result">
+				<div
+					style="color:rgb(0, 0, 0);display:inline-flex;font-family:Calibri,&quot;Lucida Grande&quot;,Arial,sans-serif;vertical-align:top;height:130px;">
+					<div style="margin-left:0px">
+						<div style="display:inline-flex">
+							<div>
+								<div
+									style="font-size:large;display:inline-flex;margin-right:15px; align-items: center;justify-content: center;">
+									<img src="" id="r-job-logo" style="display:inline-block; width: 150px;">&nbsp;<span
+										style="display:inline-block;height:130px;vertical-align:inherit;">
+										<div style="align-items: center; justify-content: center; display: flex; flex-direction: column; margin-top: 40px;">
+											<h2 id="r-first-name"
+												style="font-size:24px;margin:0px;line-height:1;font-weight:300">&nbsp;
+											</h2>
+											<span
+												style="color:rgb(0, 0, 0);font-size:15px;text-transform:uppercase;letter-spacing:2px"
+												id="r-job-description"></span>
+									</span>
+								</div>
+							</div><span style="font-family:&quot;Times New Roman&quot;;font-size:medium">&nbsp;</span>
+							<div
+								style="font-size:medium;display:inline-block;vertical-align:top;height:130px;border-left:1px solid rgb(0, 0, 0);padding-left:15px">
+								<div style="margin-left:0px"><img src="icon-phone.png" width="13px"
+										style="vertical-align:middle;margin-right:5px">&nbsp;<a href="" id="r-phone"
+										style="font-size:16px;font-weight: 400;text-decoration: none; color:#000000"
+										target="_blank"></a>
+									<hr style="margin:5px 0px;border-color:transparent"><img src="icon-whats-app.png"
+										width="18px" style="vertical-align:middle;margin-right:5px">&nbsp;<a href=""
+										id="r-whats" style="text-decoration: none; color:#000000" target="_blank"></a>
+									<hr style="margin:5px 0px;border-color:transparent"><img src="icon-link.png"
+										width="16px" style="vertical-align:middle;margin-right:5px">&nbsp;<a
+										title="Website" href="" target="_blank" id="r-site-link"
+										style="font-size:16px;font-weight: 400;text-decoration: none; color:#000000"></a>
+									<hr style="margin:5px 0px;border-color:transparent"><img src="icon-place.png"
+										width="16px" style="vertical-align:middle;margin-right:5px">
+									<div style="display:inline-flex; max-width: 280px;"><a id="r-address-link"
+											target="_blank"
+											style="font-size:16px;font-weight: 400;text-decoration: none; color:#000000"
+											title="Endereço" href=""></a></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<input id="code-input" value="" type="text">
+	</div>
+
+	</div>
+	<div id="byme" style="text-align: center;">
+		<small>Made with 🤍 by <a href="http://twitter.com/Shacalliitto" target="blank">Shacalliito</a></small>
+	</div>
+
+	<div class="img-to-download">
+		<h3>Assinatura pronta!</h3>
+		<small>Salve ou clique no botão download</small>
+		<hr>
+		<div id="previewImage" style="margin-bottom: 10px;">
+		</div>
+		<a id="btn-Convert-Html2Image" href="#">Download</a>
+	</div>
+
+	<!-- <hr>
+	<div class="suporte">
+		<h3>Precisa de Ajuda?</h3>
+		
+		<div class="help">
+			<a href="https://support.microsoft.com/pt-br/office/criar-e-adicionar-uma-assinatura-a-mensagens-8ee5d4f4-68fd-464a-a1c1-0e1c80bb27f2#ID0EAACAAA=Newer_versions">Como adicionar uma assinatura no outlook (Usando o modo imagem)</a>
+		
+			<a href="https://support.google.com/mail/answer/8395?co=GENIE.Platform%3DDesktop&hl=pt-BR">Como adicionar uma assinatura no gmail</a>
+		</div>
+	</div> -->
+
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("input").keyup(function () {
+				$("#r-first-name").html($("#first-name").val() + "&nbsp;");
+				$("#r-last-name").html($("#last-name").val() + "&nbsp;");
+				$("#r-job-description").html($("#job-description").val() + "&nbsp;");
+				$("#r-phone").html($("#phone").val() + "&nbsp;");
+				$("#r-whats").html($("#whats").val() + "&nbsp;");
+				$("#r-whats").attr("href", "https://api.whatsapp.com/send/?phone=55" + $.trim($("#whats").val()));
+				// $("#r-job-logo").html($("#logo").val() + "&nbsp;");
+
+				$("#r-site-link").html($("#site").val() + "&nbsp;");
+				$("#r-site-link").attr("href", "http://" + $("#site").val());
+
+				$("#r-address-link").html($("#address").val() + "&nbsp;");
+				$("#r-address-link").attr("href", "https://maps.google.com/?q=" + $("#address").val());
+			});
+		});
+		function copyCode() {
+			$("#code-input").val($("#result").html());
+			var copyText = document.getElementById("code-input");
+			copyText.select();
+			copyText.setSelectionRange(0, 99999); /* For mobile devices */
+			document.execCommand("copy");
+
+
+			$.toast({
+				text: "CÓDIGO COPIADO COM SUCESSO!",
+				showHideTransition: 'slide',  // It can be plain, fade or slide
+				bgColor: '#83C57B',              // Background color for toast
+				textColor: '#fff',            // text color
+				allowToastClose: false,       // Show the close button or not
+				hideAfter: 4000,              // `false` to make it sticky or time in miliseconds to hide after
+				stack: 5,                     // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
+				textAlign: 'left',            // Alignment of text i.e. left, right, center
+				position: 'top-right'       // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
+			})
+		}
+		$(function () {
+			$('#logo').change(function () {
+				const file = $(this)[0].files[0]
+				const fileReader = new FileReader()
+				fileReader.onloadend = function () {
+					$('#r-job-logo').attr('src', fileReader.result)
+				}
+				fileReader.readAsDataURL(file)
+			})
+		})
+
+		var element = $("#result"); // global variable
+		var getCanvas; // global variable
+
+		$("#btn-img-copy").on('click', function () {
+			$('.img-to-download').show();
+
+			html2canvas(element, {
+				onrendered: function (canvas) {
+					$("#previewImage").html(canvas);
+					getCanvas = canvas;
+					var imgageData = getCanvas.toDataURL("image/png");
+					// Now browser starts downloading it instead of just showing it
+					var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
+					var filename = $("#first-name").val().replace(/[^A-Z0-9]/ig, "_");
+					$("#btn-Convert-Html2Image").attr("download", filename + " Assinatura" + ".png").attr("href", newData);
+
+					$([document.documentElement, document.body]).animate({
+						scrollTop: $(".img-to-download").offset().top
+					}, 1000);
+				}
+			});
+		});
+
+
+	</script>
+
+
+</body>
+
+</html>
